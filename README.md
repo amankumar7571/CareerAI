@@ -1,0 +1,1 @@
+# VidyaMitra-The-Intelligent-Career-Agent-AI-Powered-Resume-Evaluator-Trainer-Career-Planner
