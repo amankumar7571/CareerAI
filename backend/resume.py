@@ -1,7 +1,4 @@
-import os
-import shutil
 from pathlib import Path
-from uuid import uuid4
 
 import pdfplumber
 import docx
@@ -13,6 +10,7 @@ from config import get_settings
 from database import get_db
 from auth import get_current_user
 from nlp_service import extract_skills_from_text
+from storage import cleanup_local_temp, persist_upload, prepare_upload
 
 router = APIRouter()
 
@@ -40,30 +38,27 @@ def upload_resume(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    if not file.filename:
-        raise HTTPException(status_code=400, detail="No file name provided.")
-
-    safe_name = Path(file.filename).name
+    safe_name = Path(file.filename).name if file.filename else ""
     if not safe_name.lower().endswith((".pdf", ".docx")):
         raise HTTPException(status_code=400, detail="Only PDF or DOCX files are allowed.")
 
-    file_path = UPLOAD_DIR / f"{current_user.user_id}_{uuid4().hex}_{safe_name}"
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    prepared_upload = prepare_upload(file, current_user.user_id)
 
     extracted_text = ""
     try:
         if safe_name.lower().endswith(".pdf"):
-            extracted_text = extract_text_from_pdf(str(file_path))
+            extracted_text = extract_text_from_pdf(str(prepared_upload.temp_path))
         elif safe_name.lower().endswith(".docx"):
-            extracted_text = extract_text_from_docx(str(file_path))
+            extracted_text = extract_text_from_docx(str(prepared_upload.temp_path))
     except Exception as e:
+        cleanup_local_temp(prepared_upload)
         raise HTTPException(status_code=500, detail=f"Error parsing file: {str(e)}")
-        
+
+    stored_file_path = persist_upload(prepared_upload)
+
     new_resume = models.Resume(
         user_id=current_user.user_id,
-        file_path=str(file_path),
+        file_path=stored_file_path,
         parsed_text=extracted_text
     )
     

@@ -17,6 +17,26 @@ model = None
 feature_names = None
 label_encoder = None
 
+
+def _build_display_match_scores(top_roles):
+    if not top_roles:
+        return []
+
+    adjusted_probs = [prob + 0.01 for _, prob in top_roles]
+    total = sum(adjusted_probs)
+    display_scores = []
+    allocated = 0
+
+    for index, ((role, prob), adjusted_prob) in enumerate(zip(top_roles, adjusted_probs)):
+        if index == len(top_roles) - 1:
+            score = max(1, 100 - allocated)
+        else:
+            score = max(1, round((adjusted_prob / total) * 100))
+            allocated += score
+        display_scores.append((role, prob, min(score, 99 if len(top_roles) > 1 else 100)))
+
+    return display_scores
+
 def load_artifacts():
     global model, feature_names, label_encoder
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -84,19 +104,10 @@ def predict_career(
     db.commit()
     db.refresh(prediction_record)
     
-    # Take the top N (up to 3) roles to process with Gemini
+    # Take the top N (up to 3) roles for UI recommendations.
     top_3_roles = role_probs[:3]
-    
-    # Normalize probabilities for better UI display (e.g. 95% for top match)
-    normalized_top_3 = []
-    base_scores = [0.95, 0.88, 0.78]
-    for i, (r, p) in enumerate(top_3_roles):
-        # 95% down to 78% roughly, adding a bit of the original probability
-        ui_score = base_scores[i] + (p * 0.04)
-        normalized_top_3.append((r, min(0.99, ui_score)))
-    top_3_roles = normalized_top_3
-        
-    role_names_only = [r for r, _ in top_3_roles]
+    display_top_3_roles = _build_display_match_scores(top_3_roles)
+    role_names_only = [r for r, _, _ in display_top_3_roles]
     
     enriched_results = []
     
@@ -154,13 +165,14 @@ def predict_career(
             data = json.loads(response.text)
             generative_careers = data.get("careers", [])
             
-            for base_role, base_prob in top_3_roles:
+            for base_role, raw_prob, display_score in display_top_3_roles:
                 # Find matching generated data
                 gen_data = next((c for c in generative_careers if c.get("role") == base_role), None)
                 if gen_data:
                     enriched_results.append({
                         "role": base_role,
-                        "confidence_score": base_prob,
+                        "confidence_score": raw_prob,
+                        "display_match_score": display_score,
                         "description": gen_data.get("description", f"A great match based on your skills in {', '.join(skills[:3])}."),
                         "salaryRange": gen_data.get("salary_range", ROLE_STATS.get(base_role, {}).get("salary", "$100k - $150k")),
                         "growth": gen_data.get("growth", ROLE_STATS.get(base_role, {}).get("growth", "+15% (2025)"))
@@ -168,7 +180,8 @@ def predict_career(
                 else:
                     enriched_results.append({
                         "role": base_role,
-                        "confidence_score": base_prob,
+                        "confidence_score": raw_prob,
+                        "display_match_score": display_score,
                         "description": f"Based on your extracted skills, our AI has determined this is a strong career path for your profile.",
                         "salaryRange": ROLE_STATS.get(base_role, {}).get("salary", "$120k - $160k"),
                         "growth": ROLE_STATS.get(base_role, {}).get("growth", "+18% (2025)")
@@ -176,20 +189,22 @@ def predict_career(
         except Exception as e:
             print(f"Gemini API Career Enrichment failed: {e}. Falling back to default descriptions.")
             # Fallback inner loop on exception
-            for base_role, base_prob in top_3_roles:
+            for base_role, raw_prob, display_score in display_top_3_roles:
                 enriched_results.append({
                     "role": base_role,
-                    "confidence_score": base_prob,
+                    "confidence_score": raw_prob,
+                    "display_match_score": display_score,
                     "description": f"Based on your extracted skills, our AI has determined this is a strong career path for your profile.",
                     "salaryRange": ROLE_STATS.get(base_role, {}).get("salary", "$120k - $160k"),
                     "growth": ROLE_STATS.get(base_role, {}).get("growth", "+18% (2025)")
                 })
     else:
         # Fallback if no API key
-        for base_role, base_prob in top_3_roles:
+        for base_role, raw_prob, display_score in display_top_3_roles:
             enriched_results.append({
                 "role": base_role,
-                "confidence_score": base_prob,
+                "confidence_score": raw_prob,
+                "display_match_score": display_score,
                 "description": f"Based on your extracted skills, our AI has determined this is a strong career path for your profile.",
                 "salaryRange": ROLE_STATS.get(base_role, {}).get("salary", "$120k - $160k"),
                 "growth": ROLE_STATS.get(base_role, {}).get("growth", "+18% (2025)")

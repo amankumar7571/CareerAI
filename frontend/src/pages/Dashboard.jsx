@@ -253,7 +253,7 @@ export default function Dashboard() {
                   <RecommendedCareer
                     key={idx}
                     title={roleData.role}
-                    confidence={Math.round(roleData.confidence_score * 100)}
+                    confidence={roleData.display_match_score ?? Math.round(roleData.confidence_score * 100)}
                     description={roleData.description}
                     salaryRange={roleData.salaryRange}
                     growth={roleData.growth}

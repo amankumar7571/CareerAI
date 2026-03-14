@@ -93,8 +93,15 @@ Recommended production setup:
   - `DATABASE_URL`
   - `CORS_ALLOW_ORIGINS=https://your-frontend-domain.vercel.app`
   - `GEMINI_API_KEY` (optional)
+  - `STORAGE_BACKEND=s3` for durable resume storage
+  - `S3_BUCKET_NAME`, `S3_REGION`, `S3_ENDPOINT_URL`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`
 
 Example env files are included in `backend/.env.example` and `frontend/.env.example`.
+
+Notes:
+
+- `DATABASE_URL` should point to PostgreSQL in production.
+- Resume uploads can stay local in development, but for production durability set `STORAGE_BACKEND=s3` and provide S3-compatible object storage credentials.
 
 ---
 
