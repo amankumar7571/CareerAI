@@ -86,7 +86,7 @@ Recommended production setup:
 ### Render
 
 - Root Directory: `backend`
-- Build Command: `pip install -r requirements.txt`
+- Build Command: `pip install -r requirements.txt && python ml_pipeline/train_model.py`
 - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 - Environment Variables:
   - `JWT_SECRET_KEY`

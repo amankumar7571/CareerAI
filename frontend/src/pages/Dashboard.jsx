@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '@/lib/api';
-import { Sparkles, LogOut, CheckCircle2, TrendingUp, Cpu, Map as MapIcon, Compass } from 'lucide-react';
+import { Sparkles, LogOut, Cpu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { HeaderProfile } from "@/components/dashboard/header-profile"
@@ -34,30 +34,30 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+        const response = await api.get('/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUser(response.data);
+      } catch (err) {
+        if (err.response?.status === 401) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
+        setError('Failed to load profile');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchProfile = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-      const response = await api.get('/api/auth/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setUser(response.data);
-    } catch (err) {
-      if (err.response?.status === 401) {
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
-      setError('Failed to load profile');
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchProfile();
+  }, [navigate]);
 
   const handleUpdateProfile = async (profileData) => {
     try {
