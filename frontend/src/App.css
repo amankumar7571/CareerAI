@@ -1,7 +1,0 @@
-/* App.css – Reset default Vite scaffold styles that break full-page layout */
-#root {
-  max-width: none;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-}
