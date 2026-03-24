@@ -5,48 +5,48 @@ import { ArrowRight, Sparkles, Target, BookOpen, TrendingUp, ChevronRight, Check
 const features = [
   {
     icon: Sparkles,
-    title: "AI-Powered Analysis",
-    description: "Advanced NLP extracts your skills and matches them with ideal career paths.",
+    title: "Resume Skill Extraction",
+    description: "Upload a PDF or DOCX resume and extract structured skills with Gemini, spaCy, and keyword fallback logic.",
   },
   {
     icon: Target,
-    title: "Career Matching",
-    description: "Get personalized job recommendations with confidence scores up to 99%.",
+    title: "ML Career Matching",
+    description: "Compare your profile against six modeled career paths using the trained scikit-learn predictor.",
   },
   {
     icon: BookOpen,
-    title: "Learning Roadmaps",
-    description: "Curated courses and certifications to fill your skill gaps.",
+    title: "Personal Roadmaps",
+    description: "Turn missing skills into a clear learning plan with recommended courses and next-step guidance.",
   },
   {
     icon: TrendingUp,
-    title: "Growth Insights",
-    description: "Real-time salary data and industry trends to guide your decisions.",
+    title: "Profile-Aware Guidance",
+    description: "Combine resume skills, CGPA, interests, and project context to support better career planning.",
   },
 ]
 
 const stats = [
-  { value: "50K+", label: "Career paths analyzed" },
-  { value: "98%", label: "Match accuracy" },
-  { value: "10K+", label: "Users guided" },
-  { value: "500+", label: "Partner courses" },
+  { value: "6", label: "Career roles modeled" },
+  { value: "57", label: "Skills recognized" },
+  { value: "3", label: "Skill extraction layers" },
+  { value: "2", label: "Core app layers" },
 ]
 
 const testimonials = [
   {
-    quote: "CareerAI helped me transition from marketing to product management in just 6 months.",
-    author: "Sarah Chen",
-    role: "Product Manager at Stripe",
+    quote: "Upload a resume in PDF or DOCX and generate a structured skill snapshot in seconds.",
+    author: "Step 1",
+    role: "Resume parsing and NLP extraction",
   },
   {
-    quote: "The skill gap analysis was spot-on. I knew exactly what to learn next.",
-    author: "Marcus Johnson",
-    role: "Software Engineer at Google",
+    quote: "Review the top predicted roles with model confidence and AI-enriched role summaries.",
+    author: "Step 2",
+    role: "Machine learning prediction",
   },
   {
-    quote: "Finally, a career tool that actually understands the tech landscape.",
-    author: "Elena Rodriguez",
-    role: "Data Scientist at Meta",
+    quote: "Generate a personalized roadmap to see missing skills, recommended courses, and what to learn next.",
+    author: "Step 3",
+    role: "Roadmap planning",
   },
 ]
 
@@ -67,11 +67,11 @@ export default function LandingPage() {
               <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Features
               </a>
-              <a href="#testimonials" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Testimonials
+              <a href="#workflow" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Workflow
               </a>
-              <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
+              <a href="#architecture" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Architecture
               </a>
             </div>
             <div className="flex items-center gap-3">
@@ -95,24 +95,24 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-secondary/50 mb-8">
             <span className="size-1.5 rounded-full bg-accent animate-pulse" />
-            <span className="text-xs font-medium text-muted-foreground">Next-Generation Career Intelligence</span>
+            <span className="text-xs font-medium text-muted-foreground">Resume intelligence for career planning</span>
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground tracking-tight mb-6 text-balance">
-            Accelerate your tech career with AI precision
+            Upload your resume. Discover your next role.
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty">
-            Upload your professional resume and let our proprietary AI models deeply analyze your skill set, map optimal career trajectories, and generate a competitive learning roadmap.
+            CareerAI extracts your skills, predicts the strongest-fit career roles, and builds a personalized roadmap for what to learn next.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/register">
               <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 gap-2 px-8">
-                Start Free Analysis
+                Start Career Analysis
                 <ArrowRight className="size-4" />
               </Button>
             </Link>
-            <a href="#features">
+            <a href="#workflow">
               <Button variant="outline" size="lg" className="gap-2">
-                Explore the Technology
+                See How It Works
                 <ChevronRight className="size-4" />
               </Button>
             </a>
@@ -139,10 +139,10 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Enterprise-grade tools for personal career growth
+              Built around the actual career guidance workflow
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Our advanced machine learning platform leverages the latest generation of LLMs to provide comprehensive insights and actionable strategy for ambitious professionals.
+              Every major screen maps to the product pipeline documented in the walkthrough: upload, extract, predict, and plan.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
@@ -163,18 +163,18 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 px-6 bg-secondary/20">
+      <section id="workflow" className="py-24 px-6 bg-secondary/20">
         <div className="mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Three steps to competitive advantage
+              Three steps from resume to roadmap
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { step: "01", title: "Upload Credentials", desc: "Submit your resume for an instant, deep NLP assessment." },
-              { step: "02", title: "Review Insights", desc: "Navigate your top 3 machine-predicted career trajectories with salary forecasts." },
-              { step: "03", title: "Execute Strategy", desc: "Follow dynamically generated cert/course roadmaps to bridge crucial skill gaps." },
+              { step: "01", title: "Upload Resume", desc: "Submit a PDF or DOCX file for parsing, secure storage, and skill extraction." },
+              { step: "02", title: "Review Role Matches", desc: "See the top predicted career paths with model confidence and enriched role summaries." },
+              { step: "03", title: "Build Your Roadmap", desc: "Generate missing-skill recommendations and suggested courses for the role you want to pursue." },
             ].map((item) => (
               <div key={item.step} className="text-center">
                 <div className="text-5xl font-bold text-border mb-4">{item.step}</div>
@@ -187,11 +187,11 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 px-6">
+      <section className="py-24 px-6">
         <div className="mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Trusted by professionals worldwide
+              The guided user flow
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -209,39 +209,36 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-24 px-6 bg-secondary/20">
+      <section id="architecture" className="py-24 px-6 bg-secondary/20">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Transparent investment
+              Full-stack architecture
             </h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="p-8 rounded-xl border border-border bg-card">
-              <div className="text-sm font-semibold text-muted-foreground mb-2">Essential</div>
-              <div className="text-4xl font-bold text-foreground mb-4">$0</div>
-              <p className="text-sm text-muted-foreground mb-6">Evaluate the platform risk-free.</p>
+              <div className="text-sm font-semibold text-muted-foreground mb-2">Frontend</div>
+              <div className="text-4xl font-bold text-foreground mb-4">React 19</div>
+              <p className="text-sm text-muted-foreground mb-6">Vite-powered pages for landing, authentication, and dashboard workflows.</p>
               <ul className="space-y-3 mb-8">
-                {["1 deep resume analysis", "Top 3 optimal career matches", "Static keyword extraction"].map((item) => (
+                {["React 19 + Vite 5", "Tailwind CSS v4 + shadcn/ui", "React Router v7 navigation", "Axios API integration"].map((item) => (
                   <li key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
                      <Check className="size-4 text-accent" />
                      {item}
                   </li>
                 ))}
               </ul>
-              <Link to="/register">
-                <Button variant="outline" className="w-full">Get Started</Button>
-              </Link>
+              <a href="#features">
+                <Button variant="outline" className="w-full">Review Features</Button>
+              </a>
             </div>
-            <div className="p-8 rounded-xl border border-foreground bg-card shadow-lg relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-foreground text-background text-xs font-medium">
-                Professional
-              </div>
-              <div className="text-sm font-semibold text-accent mb-2">Pro</div>
-              <div className="text-4xl font-bold text-foreground mb-4">$19<span className="text-lg font-normal text-muted-foreground">/mo</span></div>
-              <p className="text-sm text-muted-foreground mb-6">Designed for ambitious career advancement.</p>
+            <div className="p-8 rounded-xl border border-foreground bg-card shadow-lg">
+              <div className="text-sm font-semibold text-accent mb-2">Backend + AI</div>
+              <div className="text-4xl font-bold text-foreground mb-4">FastAPI</div>
+              <p className="text-sm text-muted-foreground mb-6">API, authentication, ML inference, roadmap generation, and upload orchestration.</p>
               <ul className="space-y-3 mb-8">
-                {["Unlimited AI analyses", "Gemini 1.5 Flash parsing", "Dynamic deep-learning roadmaps", "Direct enrollment routing", "High-priority prediction cues"].map((item) => (
+                {["FastAPI + SQLAlchemy 2.0", "SQLite dev / PostgreSQL prod", "scikit-learn role prediction", "Gemini + spaCy skill extraction", "Local or S3-ready file storage"].map((item) => (
                   <li key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Check className="size-4 text-accent" />
                     {item}
@@ -249,7 +246,7 @@ export default function LandingPage() {
                 ))}
               </ul>
               <Link to="/register">
-                <Button className="w-full bg-foreground text-background hover:bg-foreground/90 shadow-md">Start 14-Day Free Trial</Button>
+                <Button className="w-full bg-foreground text-background hover:bg-foreground/90 shadow-md">Create Account</Button>
               </Link>
             </div>
           </div>
@@ -260,14 +257,14 @@ export default function LandingPage() {
       <section className="py-24 px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-             Ready to secure your future?
+             Ready to plan your next move?
           </h2>
           <p className="text-muted-foreground mb-8 text-lg">
-             Leverage military-grade machine learning to outmaneuver the competition.
+             Create an account, upload your resume, and let CareerAI turn your current skills into a clearer career direction.
           </p>
           <Link to="/register">
             <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 gap-2 px-8">
-              Get Started Free
+              Start with CareerAI
               <ArrowRight className="size-4" />
             </Button>
           </Link>

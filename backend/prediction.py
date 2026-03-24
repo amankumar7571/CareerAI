@@ -22,18 +22,15 @@ def _build_display_match_scores(top_roles):
     if not top_roles:
         return []
 
-    adjusted_probs = [prob + 0.01 for _, prob in top_roles]
-    total = sum(adjusted_probs)
     display_scores = []
-    allocated = 0
 
-    for index, ((role, prob), adjusted_prob) in enumerate(zip(top_roles, adjusted_probs)):
-        if index == len(top_roles) - 1:
-            score = max(1, 100 - allocated)
-        else:
-            score = max(1, round((adjusted_prob / total) * 100))
-            allocated += score
-        display_scores.append((role, prob, min(score, 99 if len(top_roles) > 1 else 100)))
+    for role, prob in top_roles:
+        # Use the model's real probability instead of re-normalizing only the
+        # top roles to sum to 100, which makes the UI percentages misleading.
+        score = round(prob * 100, 1)
+        if prob > 0 and score == 0:
+            score = 0.1
+        display_scores.append((role, prob, min(score, 100.0)))
 
     return display_scores
 

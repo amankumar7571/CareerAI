@@ -15,7 +15,7 @@ settings = get_settings()
 # Create all tables in sqlite directly for local testing without migrations (for now).
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AI Career Guidance API")
+app = FastAPI(title="CareerAI API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,4 +33,4 @@ app.include_router(roadmap.router, prefix="/api/roadmap", tags=["roadmap"])
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to AI Career Guidance System API"}
+    return {"message": "Welcome to CareerAI API"}

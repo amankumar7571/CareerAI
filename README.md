@@ -1,140 +1,105 @@
-# AI Career Guidance System
+# CareerAI
 
-An AI-powered career guidance platform that analyzes your resume, predicts ideal career matches using a trained ML model, and generates a personalized learning roadmap with skill gap analysis.
+CareerAI is an AI-powered career guidance web app that turns a resume into actionable next steps. Users upload a PDF or DOCX resume, the backend extracts skills with NLP, predicts the best-fit career roles with a trained machine learning model, and generates a personalized learning roadmap with recommended courses.
 
-## Tech Stack
+## Core Workflow
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 19 + Vite + Tailwind CSS v4 |
-| Backend | FastAPI + SQLAlchemy + SQLite |
-| ML | scikit-learn + pandas + spaCy |
-| Auth | JWT (python-jose) + bcrypt |
+1. Upload a resume from the dashboard.
+2. Extract recognizable skills using Gemini, spaCy, or keyword fallback logic.
+3. Predict the strongest-fit career roles across six modeled paths.
+4. Generate a roadmap that highlights missing skills and suggested learning resources.
 
-## Features
+## Architecture Snapshot
 
-- 🔐 **Auth** – JWT-based register/login
-- 📄 **Resume Upload** – PDF & DOCX parsing with NLP skill extraction
-- 🤖 **AI Career Prediction** – ML model predicts best-fit role from skills
-- 🗺️ **Learning Roadmap** – Personalized skill-gap analysis with course recommendations
-- 👤 **Profile Management** – Update CGPA & interests
+| Layer | Technology | Role |
+| --- | --- | --- |
+| Frontend | React 19, Vite 5, Tailwind CSS v4, shadcn/ui, React Router v7 | Landing page, auth flow, dashboard UI |
+| Backend | FastAPI, SQLAlchemy 2.0, Uvicorn | REST API, auth, upload handling, roadmap generation |
+| AI and NLP | Google Gemini 1.5 Flash, spaCy | Context-aware skill extraction and role enrichment |
+| ML | scikit-learn | Career-role prediction from extracted skills |
+| Data | SQLite (dev), PostgreSQL (prod), local uploads or S3 | Persistence for users, resumes, predictions, and files |
 
-## Getting Started
+## Key Features
 
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
+- JWT-based registration and login
+- Resume upload with PDF and DOCX text extraction
+- Skill extraction with a three-layer fallback pipeline
+- Top career-role prediction from a trained ML model
+- Personalized roadmap generation with missing-skill analysis
+- Profile updates for CGPA, interests, and supporting context
 
----
+## What The App Models
 
-### Backend Setup
+- 6 career roles: Software Engineer, Data Scientist, Frontend Developer, Backend Developer, Machine Learning Engineer, and DevOps Engineer
+- 57 recognizable skills in the NLP layer
+- 3 skill extraction paths: Gemini, spaCy PhraseMatcher, and keyword fallback
+
+## Run Locally
+
+### Backend
 
 ```bash
-cd career_guidance_system/backend
-
-# Create and activate virtual environment
+cd backend
 python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
-
-# Install dependencies
+venv\Scripts\activate
 pip install -r requirements.txt
-
-# (Optional) Download spaCy English model for better NLP
 python -m spacy download en_core_web_sm
-
-# Run the API server
 uvicorn main:app --reload --port 8000
 ```
 
-API will be available at: **http://localhost:8000**  
-Interactive docs: **http://localhost:8000/docs**
+Backend API: `http://localhost:8000`
+API docs: `http://localhost:8000/docs`
 
----
-
-### Frontend Setup
+### Frontend
 
 ```bash
-cd career_guidance_system/frontend
-
-# Install dependencies
+cd frontend
 npm install
-
-# Start development server
 npm run dev
 ```
 
-App will be available at: **http://localhost:5173**
-
----
-
-## Deployment
-
-Recommended production setup:
-
-- Deploy `frontend/` to Vercel
-- Deploy `backend/` to Render
-
-### Vercel
-
-- Root Directory: `frontend`
-- Framework Preset: `Vite`
-- Build Command: `npm run build`
-- Output Directory: `dist`
-- Environment Variable: `VITE_API_BASE_URL=https://your-backend-service.onrender.com`
-
-### Render
-
-- Root Directory: `backend`
-- Build Command: `pip install -r requirements.txt && python ml_pipeline/train_model.py`
-- Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- Environment Variables:
-  - `JWT_SECRET_KEY`
-  - `DATABASE_URL`
-  - `CORS_ALLOW_ORIGINS=https://your-frontend-domain.vercel.app`
-  - `GEMINI_API_KEY` (optional)
-  - `STORAGE_BACKEND=s3` for durable resume storage
-  - `S3_BUCKET_NAME`, `S3_REGION`, `S3_ENDPOINT_URL`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`
-
-Example env files are included in `backend/.env.example` and `frontend/.env.example`.
-
-Notes:
-
-- `DATABASE_URL` should point to PostgreSQL in production.
-- Resume uploads can stay local in development, but for production durability set `STORAGE_BACKEND=s3` and provide S3-compatible object storage credentials.
-
----
+Frontend app: `http://localhost:5173`
 
 ## Project Structure
 
-```
+```text
 career_guidance_system/
-├── backend/
-│   ├── main.py              # FastAPI app entry point
-│   ├── auth.py              # JWT authentication
-│   ├── user_profile.py      # Profile management
-│   ├── resume.py            # Resume upload & parsing
-│   ├── prediction.py        # ML career prediction
-│   ├── roadmap.py           # Skill gap & roadmap engine
-│   ├── nlp_service.py       # NLP skill extraction
-│   ├── models.py            # SQLAlchemy models
-│   ├── database.py          # DB config & session
-│   ├── schemas.py           # Pydantic schemas
-│   └── requirements.txt     # Python dependencies
-└── frontend/
-    ├── src/
-    │   ├── pages/
-    │   │   ├── Login.jsx
-    │   │   ├── Register.jsx
-    │   │   └── Dashboard.jsx
-    │   ├── App.jsx
-    │   └── index.css        # Global + glassmorphism styles
-    ├── index.html
-    └── package.json
+|-- backend/
+|   |-- main.py
+|   |-- auth.py
+|   |-- user_profile.py
+|   |-- resume.py
+|   |-- prediction.py
+|   |-- roadmap.py
+|   |-- nlp_service.py
+|   |-- models.py
+|   |-- database.py
+|   |-- ml_pipeline/
+|   `-- requirements.txt
+|-- frontend/
+|   |-- index.html
+|   |-- package.json
+|   `-- src/
+|       |-- App.jsx
+|       |-- main.jsx
+|       |-- pages/
+|       `-- components/
+`-- render.yaml
 ```
 
-## Notes
+## API Flow
 
-- The SQLite database file (`career_db.sqlite`) is git-ignored and will be auto-created on first run.
-- The pre-trained ML model `.pkl` files are git-ignored (large binaries). Re-train using `backend/ml_pipeline/` scripts if needed.
-- User-uploaded resumes in `backend/uploads/` are git-ignored for privacy.
+- `POST /api/auth/register` creates a new user with a hashed password.
+- `POST /api/auth/login` returns a JWT bearer token.
+- `GET /api/auth/me` returns the authenticated user profile.
+- `POST /api/resume/upload` stores the resume, extracts text, and returns detected skills.
+- `POST /api/prediction/predict` predicts the top role matches from extracted skills.
+- `POST /api/roadmap/generate` builds the learning roadmap for a selected role.
+
+## Deployment Notes
+
+- `frontend/` can be deployed to Vercel.
+- `backend/` can be deployed to Render.
+- Use PostgreSQL in production instead of SQLite.
+- Set `STORAGE_BACKEND=s3` with S3-compatible credentials for durable production uploads.
+- Example environment files live in `backend/.env.example` and `frontend/.env.example`.

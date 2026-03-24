@@ -209,7 +209,7 @@ export default function Dashboard() {
             <HeaderProfile
               userName={user?.name || "User"}
               role={user?.email || "No email"}
-              bio={error || "Welcome to your AI Career Dashboard. Upload a resume to begin."}
+              bio={error || "Welcome to CareerAI. Upload a resume to extract skills, predict roles, and generate a roadmap."}
               avatarUrl={`https://ui-avatars.com/api/?name=${user?.name || 'U'}&background=random`}
               user={user}
               onUpdateProfile={handleUpdateProfile}
@@ -231,13 +231,13 @@ export default function Dashboard() {
                 className="w-full mt-4 bg-foreground text-background hover:bg-foreground/90 h-12"
               >
                 <Cpu className="size-4 mr-2" />
-                Predict Ideal Career Matches
+                Predict Career Matches
               </Button>
             )}
             {predicting && (
                 <Button disabled className="w-full mt-4 bg-foreground py-6 text-background">
                   <div className="w-5 h-5 border-2 border-background border-t-transparent rounded-full animate-spin mr-2"></div>
-                  Executing Predictive AI Models...
+                  Running career prediction model...
                 </Button>
             )}
           </div>
@@ -246,7 +246,7 @@ export default function Dashboard() {
           {predictionResult && predictionResult.enriched_roles && (
             <div className="lg:col-span-12">
               <div className="flex items-center justify-between mb-4 mt-6">
-                 <h2 className="text-xl font-bold text-foreground">Optimized Career Trajectories</h2>
+                 <h2 className="text-xl font-bold text-foreground">Recommended Career Roles</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {predictionResult.enriched_roles.map((roleData, idx) => (

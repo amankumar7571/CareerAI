@@ -26,6 +26,13 @@ export function RecommendedCareer({
   onViewDetails,
   isActiveLoading = false
 }: RecommendedCareerProps) {
+  const formattedConfidence =
+    confidence > 0 && confidence < 1
+      ? "<1%"
+      : Number.isInteger(confidence)
+        ? `${confidence}%`
+        : `${confidence.toFixed(1)}%`
+
   return (
     <div className="flex flex-col h-full rounded-2xl border border-border bg-card p-6 hover:border-foreground/20 transition-colors">
       <div className="flex items-center justify-between mb-4">
@@ -51,7 +58,7 @@ export function RecommendedCareer({
         <div className="space-y-2 mt-auto">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground font-medium">AI Match</span>
-            <span className="text-foreground font-bold text-lg">{confidence}%</span>
+            <span className="text-foreground font-bold text-lg">{formattedConfidence}</span>
           </div>
           <Progress value={confidence} className="h-2 bg-secondary [&>div]:bg-foreground" />
         </div>
