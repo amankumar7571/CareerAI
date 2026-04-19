@@ -1,105 +1,71 @@
-# CareerAI
+# CareerAI 🚀
 
-CareerAI is an AI-powered career guidance web app that turns a resume into actionable next steps. Users upload a PDF or DOCX resume, the backend extracts skills with NLP, predicts the best-fit career roles with a trained machine learning model, and generates a personalized learning roadmap with recommended courses.
+**CareerAI** is an intelligent career transition platform that transforms resumes into actionable learning roadmaps. By combining NLP-driven skill extraction with machine learning career matching, it helps users identify their strongest career paths and bridges the gap between their current skills and their next professional goal.
 
-## Core Workflow
+[![Technical Stack](https://img.shields.io/badge/Stack-FastAPI%20%7C%20React%20%7C%20ML-blue)](https://github.com/amankumar7571/CareerAI)
 
-1. Upload a resume from the dashboard.
-2. Extract recognizable skills using Gemini, spaCy, or keyword fallback logic.
-3. Predict the strongest-fit career roles across six modeled paths.
-4. Generate a roadmap that highlights missing skills and suggested learning resources.
+## 🌟 Key Features
 
-## Architecture Snapshot
+- **Intelligent Extraction**: PDF/DOCX resume parsing using a three-layer fallback (Gemini 1.5 Flash -> spaCy -> Keyword Matching).
+- **Predictive Guidance**: Trained scikit-learn models to predict best-fit roles across 6 major tech paths.
+- **Dynamic Roadmaps**: Personalized learning plans generated via AI, identifying missing skills and recommending specific learning resources.
+- **Modern Stack**: Built with React 19 (Frontend) and FastAPI (Backend) for high-performance, real-time interactions.
 
-| Layer | Technology | Role |
-| --- | --- | --- |
-| Frontend | React 19, Vite 5, Tailwind CSS v4, shadcn/ui, React Router v7 | Landing page, auth flow, dashboard UI |
-| Backend | FastAPI, SQLAlchemy 2.0, Uvicorn | REST API, auth, upload handling, roadmap generation |
-| AI and NLP | Google Gemini 1.5 Flash, spaCy | Context-aware skill extraction and role enrichment |
-| ML | scikit-learn | Career-role prediction from extracted skills |
-| Data | SQLite (dev), PostgreSQL (prod), local uploads or S3 | Persistence for users, resumes, predictions, and files |
+## 🛠 Architecture
 
-## Key Features
+| Layer | Technologies |
+|---|---|
+| **Frontend** | React 19, Vite 5, Tailwind CSS v4, shadcn/ui, Lucid Icons |
+| **Backend** | FastAPI, SQLAlchemy 2.0, Uvicorn |
+| **AI/NLP** | Google Gemini 1.5 Flash, spaCy (en_core_web_sm) |
+| **Machine Learning** | scikit-learn (Random Forest classification) |
+| **Persistence** | SQLite (Development), PostgreSQL (Production) |
 
-- JWT-based registration and login
-- Resume upload with PDF and DOCX text extraction
-- Skill extraction with a three-layer fallback pipeline
-- Top career-role prediction from a trained ML model
-- Personalized roadmap generation with missing-skill analysis
-- Profile updates for CGPA, interests, and supporting context
+## 🚀 Getting Started
 
-## What The App Models
+### Prerequisites
 
-- 6 career roles: Software Engineer, Data Scientist, Frontend Developer, Backend Developer, Machine Learning Engineer, and DevOps Engineer
-- 57 recognizable skills in the NLP layer
-- 3 skill extraction paths: Gemini, spaCy PhraseMatcher, and keyword fallback
+- **Node.js** (v18+)
+- **Python** (v3.10+)
+- **Gemini API Key** (Get it from [Google AI Studio](https://aistudio.google.com/))
 
-## Run Locally
+### Fast Launch (Windows)
 
-### Backend
+Simply run the launcher at the root:
+```powershell
+./start.ps1
+# OR
+./start.bat
+```
 
+### Manual Setup
+
+#### 1. Backend
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate
+# Activate: .\venv\Scripts\activate
 pip install -r requirements.txt
 python -m spacy download en_core_web_sm
+# Copy .env.example to .env and add your GEMINI_API_KEY
 uvicorn main:app --reload --port 8000
 ```
 
-Backend API: `http://localhost:8000`
-API docs: `http://localhost:8000/docs`
-
-### Frontend
-
+#### 2. Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Frontend app: `http://localhost:5173`
+## 🔒 Security & Environment
 
-## Project Structure
+CareerAI uses `.env` files for configuration. Ensure you never commit your `.env` file containing your `GEMINI_API_KEY`. 
+See `backend/.env.example` and `frontend/.env.example` for the required structure.
 
-```text
-career_guidance_system/
-|-- backend/
-|   |-- main.py
-|   |-- auth.py
-|   |-- user_profile.py
-|   |-- resume.py
-|   |-- prediction.py
-|   |-- roadmap.py
-|   |-- nlp_service.py
-|   |-- models.py
-|   |-- database.py
-|   |-- ml_pipeline/
-|   `-- requirements.txt
-|-- frontend/
-|   |-- index.html
-|   |-- package.json
-|   `-- src/
-|       |-- App.jsx
-|       |-- main.jsx
-|       |-- pages/
-|       `-- components/
-`-- render.yaml
-```
+## 🤝 Contributing
 
-## API Flow
+Contributions are welcome! Please open an issue or submit a pull request for any improvements.
 
-- `POST /api/auth/register` creates a new user with a hashed password.
-- `POST /api/auth/login` returns a JWT bearer token.
-- `GET /api/auth/me` returns the authenticated user profile.
-- `POST /api/resume/upload` stores the resume, extracts text, and returns detected skills.
-- `POST /api/prediction/predict` predicts the top role matches from extracted skills.
-- `POST /api/roadmap/generate` builds the learning roadmap for a selected role.
-
-## Deployment Notes
-
-- `frontend/` can be deployed to Vercel.
-- `backend/` can be deployed to Render.
-- Use PostgreSQL in production instead of SQLite.
-- Set `STORAGE_BACKEND=s3` with S3-compatible credentials for durable production uploads.
-- Example environment files live in `backend/.env.example` and `frontend/.env.example`.
+---
+© 2026 CareerAI - Intelligent Career Planning

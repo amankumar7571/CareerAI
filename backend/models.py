@@ -13,7 +13,6 @@ class User(Base):
     interests = Column(Text, nullable=True)
 
     resumes = relationship("Resume", back_populates="user")
-    skills = relationship("UserSkill", back_populates="user")
     predictions = relationship("Prediction", back_populates="user")
 
 class Resume(Base):
@@ -26,38 +25,6 @@ class Resume(Base):
 
     user = relationship("User", back_populates="resumes")
 
-class Skill(Base):
-    __tablename__ = "skills"
-    skill_id = Column(Integer, primary_key=True, index=True)
-    skill_name = Column(String, unique=True, index=True)
-    category = Column(String, nullable=True)
-
-class UserSkill(Base):
-    __tablename__ = "user_skills"
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
-    skill_id = Column(Integer, ForeignKey("skills.skill_id"))
-    proficiency = Column(String, nullable=True)
-
-    user = relationship("User", back_populates="skills")
-    skill = relationship("Skill")
-
-class CareerRole(Base):
-    __tablename__ = "career_roles"
-    role_id = Column(Integer, primary_key=True, index=True)
-    role_name = Column(String, unique=True, index=True)
-    description = Column(Text, nullable=True)
-
-class RoleSkill(Base):
-    __tablename__ = "role_skills"
-    id = Column(Integer, primary_key=True, index=True)
-    role_id = Column(Integer, ForeignKey("career_roles.role_id"))
-    skill_id = Column(Integer, ForeignKey("skills.skill_id"))
-    importance_level = Column(Integer, nullable=True)
-
-    role = relationship("CareerRole")
-    skill = relationship("Skill")
-
 class Prediction(Base):
     __tablename__ = "predictions"
     prediction_id = Column(Integer, primary_key=True, index=True)
@@ -67,13 +34,3 @@ class Prediction(Base):
     prediction_date = Column(Date, default=datetime.date.today)
 
     user = relationship("User", back_populates="predictions")
-
-class Roadmap(Base):
-    __tablename__ = "roadmaps"
-    roadmap_id = Column(Integer, primary_key=True, index=True)
-    role_id = Column(Integer, ForeignKey("career_roles.role_id"))
-    skills_to_learn = Column(Text)
-    courses = Column(Text)
-    projects = Column(Text)
-
-    role = relationship("CareerRole")

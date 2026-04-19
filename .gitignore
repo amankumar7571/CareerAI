@@ -34,3 +34,16 @@ yarn-error.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Junk and temporary files
+out.txt
+err.txt
+out_uvicorn*.txt
+frontend_err.log
+frontend_out.log
+backend.log
+frontend.log
+
+# Local storage and database journals
+career_db.sqlite-journal
+career_db.sqlite-wal

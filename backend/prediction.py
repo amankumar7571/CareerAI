@@ -17,22 +17,42 @@ model = None
 feature_names = None
 label_encoder = None
 
+# Core skills per role (mirrors generate_data.py) — used for independent match scoring
+SKILLS_MAP = {
+    "Software Engineer": ["Java", "C++", "Python", "Problem Solving", "Data Structures", "Algorithms", "Git", "SQL"],
+    "Data Scientist": ["Python", "SQL", "Pandas", "NumPy", "Scikit-Learn", "Machine Learning", "Tableau", "Statistics"],
+    "Frontend Developer": ["JavaScript", "HTML", "CSS", "React", "Vue", "TypeScript", "TailwindCSS"],
+    "Backend Developer": ["Python", "Java", "Node.js", "Express", "Django", "SQL", "PostgreSQL", "REST API", "Docker"],
+    "Machine Learning Engineer": ["Python", "Machine Learning", "Deep Learning", "TensorFlow", "PyTorch", "AWS", "SQL"],
+    "DevOps Engineer": ["Linux", "Bash", "Docker", "Kubernetes", "AWS", "Azure", "Git", "CI/CD"],
+    "Data Analyst": ["Python", "SQL", "Pandas", "Tableau", "Excel", "Statistics", "NumPy"],
+}
 
-def _build_display_match_scores(top_roles):
+
+def _compute_skill_match(role: str, user_skills: list[str]) -> float:
+    """Return a 0-100 match score: what % of the role's core skills the user has."""
+    core_skills = SKILLS_MAP.get(role)
+    if not core_skills:
+        return 0.0
+    lower_user = [s.lower() for s in user_skills]
+    matched = sum(1 for s in core_skills if s.lower() in lower_user)
+    return round(matched / len(core_skills) * 100, 1)
+
+
+def _build_display_match_scores(top_roles, user_skills: list[str]):
+    """Build display scores using independent skill-overlap percentages (0-100 each)."""
     if not top_roles:
         return []
 
     display_scores = []
-
     for role, prob in top_roles:
-        # Use the model's real probability instead of re-normalizing only the
-        # top roles to sum to 100, which makes the UI percentages misleading.
-        score = round(prob * 100, 1)
-        if prob > 0 and score == 0:
-            score = 0.1
+        score = _compute_skill_match(role, user_skills)
+        if score == 0 and prob > 0:
+            score = 0.1  # tiny floor so the bar isn't empty
         display_scores.append((role, prob, min(score, 100.0)))
 
     return display_scores
+
 
 def load_artifacts():
     global model, feature_names, label_encoder
@@ -103,7 +123,7 @@ def predict_career(
     
     # Take the top N (up to 3) roles for UI recommendations.
     top_3_roles = role_probs[:3]
-    display_top_3_roles = _build_display_match_scores(top_3_roles)
+    display_top_3_roles = _build_display_match_scores(top_3_roles, skills)
     role_names_only = [r for r, _, _ in display_top_3_roles]
     
     enriched_results = []
