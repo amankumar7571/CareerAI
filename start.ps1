@@ -21,7 +21,7 @@ Write-Host "[1/2] Starting Frontend (port 5173)..." -ForegroundColor Green
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd frontend; npm run dev"
 
 Write-Host "[2/2] Starting Backend (port 8000)..." -ForegroundColor Green
-Start-Process powershell -ArgumentList "-ExecutionPolicy", "Bypass", "-NoExit", "-Command", "cd backend; .\venv\Scripts\Activate.ps1; uvicorn main:app --reload --reload-exclude '*.sqlite', '*.sqlite-journal', 'uploads/*' --port 8000"
+Start-Process powershell -ArgumentList "-ExecutionPolicy", "Bypass", "-NoExit", "-Command", "cd backend; .\venv\Scripts\Activate.ps1; python -m uvicorn main:app --reload --reload-exclude uploads --port 8000"
 
 Write-Host ""
 Write-Host "===================================================" -ForegroundColor Cyan

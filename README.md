@@ -48,7 +48,7 @@ python -m venv venv
 pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 # Copy .env.example to .env and add your GEMINI_API_KEY
-uvicorn main:app --reload --port 8000
+python -m uvicorn main:app --reload --reload-exclude uploads --port 8000
 ```
 
 #### 2. Frontend

@@ -27,7 +27,7 @@ echo [1/2] Starting Frontend (port 5173)...
 start "CareerAI-Frontend" cmd /c "cd frontend && npm run dev"
 
 echo [2/2] Starting Backend (port 8000)...
-start "CareerAI-Backend" cmd /c "cd backend && call venv\Scripts\activate.bat && uvicorn main:app --reload --reload-exclude *.sqlite --reload-exclude *.sqlite-journal --reload-exclude uploads/* --port 8000"
+start "CareerAI-Backend" cmd /c "cd backend && call venv\Scripts\activate.bat && python -m uvicorn main:app --reload --reload-exclude uploads --port 8000"
 
 echo.
 echo ===================================================
