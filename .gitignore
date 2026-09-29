@@ -1,3 +1,4 @@
+# Python
 __pycache__/
 *.py[cod]
 *.pyo
@@ -9,10 +10,14 @@ venv/
 env/
 *.egg-info/
 
+# Databases
 *.sqlite
 *.sqlite3
 *.db
+career_db.sqlite-journal
+career_db.sqlite-wal
 
+# ML model artifacts (regenerate locally via ml_pipeline/train_model.py)
 backend/career_model.pkl
 backend/career_model_features.pkl
 backend/career_roles_encoder.pkl
@@ -20,16 +25,21 @@ backend/uploads/
 backend/venv/
 backend/__pycache__/
 
+# Node / Frontend
+node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/.env
 
+# Build artifacts
 build/
 dist/
 *.log
 npm-debug.log*
 yarn-error.log*
+yarn.lock
 
+# IDE / OS
 .vscode/
 .idea/
 .DS_Store
@@ -43,7 +53,3 @@ frontend_err.log
 frontend_out.log
 backend.log
 frontend.log
-
-# Local storage and database journals
-career_db.sqlite-journal
-career_db.sqlite-wal
