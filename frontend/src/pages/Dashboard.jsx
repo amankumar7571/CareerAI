@@ -255,8 +255,6 @@ export default function Dashboard() {
                     title={roleData.role}
                     confidence={roleData.display_match_score ?? Math.round(roleData.confidence_score * 100)}
                     description={roleData.description}
-                    salaryRange={roleData.salaryRange}
-                    growth={roleData.growth}
                     isTopMatch={idx === 0}
                     isActiveLoading={generatingRoadmap && activeRoadmapRole === roleData.role}
                     onViewDetails={() => handleGenerateRoadmap(roleData.role)}

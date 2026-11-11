@@ -21,6 +21,20 @@
 | **Machine Learning** | scikit-learn (Random Forest classification) |
 | **Persistence** | SQLite (Development), PostgreSQL (Production) |
 
+## 📄 Research Model (ICCISS 2027)
+
+The system evaluated in our paper uses a **43-category TF-IDF + Platt-calibrated
+linear SVM** on the ResumeAtlas corpus (13,389 documents → 11,507 deduplicated,
+leakage-controlled split): **82.58% top-1 / 94.18% top-3 accuracy** in a 29.45 MB
+artifact on two CPU cores. See [MODEL_CARD.md](MODEL_CARD.md) for metrics,
+limitations and reproduction steps.
+
+The pipeline code lives in `backend/ml_pipeline/resume_text_classifier.py`
+(train with `python ml_pipeline/train_resume_classifier.py --data data/resumes.csv`).
+The running demo in this repo uses a separate 6-role tabular model trained on
+synthetic data (`backend/ml_pipeline/train_model.py`) — the two systems are
+documented separately so the numbers are never mixed up.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -62,6 +76,22 @@ npm run dev
 
 CareerAI uses `.env` files for configuration. Ensure you never commit your `.env` file containing your `GEMINI_API_KEY`. 
 See `backend/.env.example` and `frontend/.env.example` for the required structure.
+
+## 🧪 Running Tests
+
+Backend tests use pytest + FastAPI TestClient. No Gemini key or network is needed — skill extraction falls back to local keyword matching in tests.
+
+```bash
+cd backend
+pip install -r requirements.txt
+python -m pytest tests -v
+```
+
+What is covered:
+- Resume parsing pipeline (PDF and DOCX text extraction)
+- `POST /api/resume/upload` — success, invalid-file rejection, and auth (401 without a token)
+- Prediction helpers (skill-match scoring)
+- `POST /api/prediction/predict` — clean 500 when model artifacts are missing (regenerate them with `python ml_pipeline/train_model.py`)
 
 ## 🤝 Contributing
 

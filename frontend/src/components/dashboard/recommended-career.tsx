@@ -2,15 +2,13 @@
 
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Briefcase, TrendingUp, ArrowUpRight, Map as MapIcon } from "lucide-react"
+import { Briefcase, ArrowUpRight, Map as MapIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface RecommendedCareerProps {
   title: string
   confidence: number
   description: string
-  salaryRange: string
-  growth: string
   isTopMatch?: boolean
   onViewDetails?: () => void
   isActiveLoading?: boolean
@@ -20,8 +18,6 @@ export function RecommendedCareer({
   title, 
   confidence, 
   description, 
-  salaryRange,
-  growth,
   isTopMatch = false,
   onViewDetails,
   isActiveLoading = false
@@ -63,20 +59,8 @@ export function RecommendedCareer({
           <Progress value={confidence} className="h-2 bg-secondary [&>div]:bg-foreground" />
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-3 mt-2">
-          <div className="rounded-xl bg-secondary/50 p-3">
-            <span className="text-xs text-muted-foreground block mb-1">Avg. Salary</span>
-            <span className="text-sm font-semibold text-foreground">{salaryRange}</span>
-          </div>
-          <div className="rounded-xl bg-secondary/50 p-3">
-            <div className="flex items-center gap-1">
-              <TrendingUp className="size-3 text-foreground" />
-              <span className="text-xs text-muted-foreground">Job Growth</span>
-            </div>
-            <span className="text-sm font-semibold text-foreground">{growth}</span>
-          </div>
-        </div>
+        {/* No salary or job-growth figures are shown: this system states no
+            labour-market statistics it cannot source (see MODEL_CARD.md). */}
 
         <Button 
             disabled={isActiveLoading}

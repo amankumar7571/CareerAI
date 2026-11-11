@@ -128,15 +128,12 @@ def predict_career(
     
     enriched_results = []
     
-    ROLE_STATS = {
-        "Software Engineer": {"salary": "$110k - $160k", "growth": "+22% (2025)"},
-        "Data Scientist": {"salary": "$125k - $175k", "growth": "+36% (2025)"},
-        "Frontend Developer": {"salary": "$90k - $140k", "growth": "+15% (2025)"},
-        "Backend Developer": {"salary": "$100k - $150k", "growth": "+18% (2025)"},
-        "Machine Learning Engineer": {"salary": "$135k - $185k", "growth": "+40% (2025)"},
-        "DevOps Engineer": {"salary": "$115k - $165k", "growth": "+21% (2025)"},
-        "Data Analyst": {"salary": "$75k - $110k", "growth": "+20% (2025)"}
-    }
+    # NOTE: this system states no salary or job-growth figures. The paper
+    # (ICCISS 2027, Sec. VIII) treats that as a requirement, not a
+    # limitation: the system has no sourced data for any such figure, and
+    # a recommender that fabricates labour-market statistics causes harm
+    # in proportion to how much it is trusted. Hardcoded USD ranges that
+    # used to live here were removed for that reason (see MODEL_CARD.md).
     
     import google.generativeai as genai
     import json
@@ -152,10 +149,11 @@ def predict_career(
             The user has these skills: {', '.join(skills)}.
             Our base ML model identified these top career matches: {', '.join(role_names_only)}.
             
-            For EACH of these {len(role_names_only)} roles, provide:
-            1. A 2-sentence personalized description of why this role fits their specific skills.
-            2. An estimated average Salary Range in USD (e.g., "$110k - $150k").
-            3. A projected 2025 Job Growth percentage (e.g., "+15% (2025)").
+            For EACH of these {len(role_names_only)} roles, provide a
+            2-sentence personalized description of why this role fits
+            their specific skills. Do NOT include any salary range, job
+            growth or demand figure: this system states no labour-market
+            statistics it cannot source.
             
             Respond with ONLY a valid JSON format EXACTLY matching this schema:
             {{
@@ -163,8 +161,6 @@ def predict_career(
                     {{
                         "role": "Role Name",
                         "description": "Personalized description...",
-                        "salary_range": "$100k - $140k",
-                        "growth": "+12% (2025)"
                     }}
                 ]
             }}
@@ -191,8 +187,6 @@ def predict_career(
                         "confidence_score": raw_prob,
                         "display_match_score": display_score,
                         "description": gen_data.get("description", f"A great match based on your skills in {', '.join(skills[:3])}."),
-                        "salaryRange": gen_data.get("salary_range", ROLE_STATS.get(base_role, {}).get("salary", "$100k - $150k")),
-                        "growth": gen_data.get("growth", ROLE_STATS.get(base_role, {}).get("growth", "+15% (2025)"))
                     })
                 else:
                     enriched_results.append({
@@ -200,8 +194,6 @@ def predict_career(
                         "confidence_score": raw_prob,
                         "display_match_score": display_score,
                         "description": f"Based on your extracted skills, our AI has determined this is a strong career path for your profile.",
-                        "salaryRange": ROLE_STATS.get(base_role, {}).get("salary", "$120k - $160k"),
-                        "growth": ROLE_STATS.get(base_role, {}).get("growth", "+18% (2025)")
                     })
         except Exception as e:
             print(f"Gemini API Career Enrichment failed: {e}. Falling back to default descriptions.")
@@ -212,8 +204,6 @@ def predict_career(
                     "confidence_score": raw_prob,
                     "display_match_score": display_score,
                     "description": f"Based on your extracted skills, our AI has determined this is a strong career path for your profile.",
-                    "salaryRange": ROLE_STATS.get(base_role, {}).get("salary", "$120k - $160k"),
-                    "growth": ROLE_STATS.get(base_role, {}).get("growth", "+18% (2025)")
                 })
     else:
         # Fallback if no API key
@@ -223,8 +213,6 @@ def predict_career(
                 "confidence_score": raw_prob,
                 "display_match_score": display_score,
                 "description": f"Based on your extracted skills, our AI has determined this is a strong career path for your profile.",
-                "salaryRange": ROLE_STATS.get(base_role, {}).get("salary", "$120k - $160k"),
-                "growth": ROLE_STATS.get(base_role, {}).get("growth", "+18% (2025)")
             })
 
     return {

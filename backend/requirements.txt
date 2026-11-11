@@ -16,3 +16,7 @@ google-generativeai==0.8.4
 python-dotenv==1.0.1
 psycopg[binary]==3.2.10
 boto3==1.39.13
+
+# Testing
+pytest==9.2.0
+httpx==0.28.1
