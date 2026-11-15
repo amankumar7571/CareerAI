@@ -25,9 +25,9 @@ services:
         value: sqlite:///./career_db.sqlite
       - key: STORAGE_BACKEND
         value: local
-      # TODO after the frontend is deployed: replace this with the real
-      # frontend origin, e.g. https://careerai.netlify.app
+      # Frontend origin (Netlify, deployed 15 Nov 2026). The dashboard env
+      # var holds the same value; keep them in sync on redeploys.
       - key: CORS_ALLOW_ORIGINS
-        value: http://localhost:5173,http://127.0.0.1:5173
+        value: https://resonant-kashata-d7e744.netlify.app
       # GEMINI_API_KEY is optional: leave unset and skill extraction falls
       # back to the local spaCy / keyword path.
