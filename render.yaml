@@ -1,7 +1,33 @@
+# Render Blueprint — CareerAI backend (FREE tier only, no paid services).
+# Deploy: connect this repo in the Render dashboard and "New + > Blueprint",
+# or `render blueprint launch`. After the backend is live, deploy the
+# frontend (Netlify free) with VITE_API_BASE_URL set to the backend URL,
+# then update CORS_ALLOW_ORIGINS below to the frontend's URL and redeploy.
 services:
   - type: web
     name: career-guidance-backend
     env: python
+    plan: free
     rootDir: backend
     buildCommand: pip install -r requirements.txt && python ml_pipeline/train_model.py
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      # Render generates a random secret on first deploy; never commit one.
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      # Default SQLite file (free, no managed database). Note: Render's free
+      # web-service disk is ephemeral — users and uploads reset on redeploy.
+      # That is acceptable for this demo; do NOT add a paid database.
+      - key: DATABASE_URL
+        value: sqlite:///./career_db.sqlite
+      - key: STORAGE_BACKEND
+        value: local
+      # TODO after the frontend is deployed: replace this with the real
+      # frontend origin, e.g. https://careerai.netlify.app
+      - key: CORS_ALLOW_ORIGINS
+        value: http://localhost:5173,http://127.0.0.1:5173
+      # GEMINI_API_KEY is optional: leave unset and skill extraction falls
+      # back to the local spaCy / keyword path.

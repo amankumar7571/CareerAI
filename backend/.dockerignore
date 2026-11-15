@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.sqlite
+*.sqlite-journal
+uploads/
+tests/
+.pytest_cache/
+career_model.pkl
+career_model_features.pkl
+career_roles_encoder.pkl
